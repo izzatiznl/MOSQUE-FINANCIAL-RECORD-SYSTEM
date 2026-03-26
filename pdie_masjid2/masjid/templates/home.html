@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mosque Financial System | Kampung Rinching Hulu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                        url("{% static 'masjid1.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: rgba(0,0,0,0.7);
+        }
+
+        .navbar .nav-link, .navbar .navbar-brand {
+            color: #fff !important;
+            font-weight: 500;
+        }
+
+        .hero-container {
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 800px;
+            margin: 140px auto 40px auto;
+            padding: 60px 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #7D9FCF;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .btn-group-custom .btn {
+            margin: 10px;
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: 30px;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-committee {
+            background-color: #7D9FCF;
+            color: #fff;
+        }
+
+        .btn-treasurer {
+            background-color: #95B8D1;
+            color: #fff;
+        }
+
+        .btn-admin {
+            background-color: #EAC6D3;
+            color: #6B1D37;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.95;
+        }
+
+        .info-section {
+            background: rgba(255, 255, 255, 0.97);
+            margin: 20px auto 60px auto;
+            padding: 50px;
+            border-radius: 25px;
+            max-width: 1000px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-section h3 {
+            color: #7D9FCF;
+            font-weight: 600;
+        }
+
+        .info-section ul {
+            padding-left: 20px;
+        }
+
+        footer {
+            background-color: rgba(0,0,0,0.7);
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">Masjid Qaryah Kampung Rinching Hulu 🕌</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a href="{% url 'homepage' %}" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+                <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link">Sign Up</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="hero-container text-center">
+    <h1 class="hero-title">Mosque Financial Record System</h1>
+    <p class="hero-subtitle">Welcome to the official system of Masjid Qaryah Kampung Rinching Hulu. Manage events, income, expenses, and budget approvals.All in one platform.</p>
+    <div class="btn-group-custom d-flex justify-content-center flex-wrap mt-4">
+        <a href="{% url 'login' %}" class="btn btn-committee">Committee</a>
+        <a href="{% url 'login' %}" class="btn btn-treasurer">Treasurer</a>
+        <a href="{% url 'login' %}" class="btn btn-admin">Administrator</a>
+    </div>
+</div>
+
+<!-- About Section -->
+<div class="info-section" id="about">
+    <h3 class="text-center mb-4">About Us</h3>
+    <div class="text-center mb-4">
+        <img src="{% static 'masjid2.png' %}" alt="Mosque Image" style="max-width: 100%; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
+    </div>
+    <p>
+        Masjid Qaryah Kampung Rinching Hulu is a central place of worship, learning, and community service for the residents of Kampung Rinching Hulu. The mosque not only serves as a venue for daily prayers and religious classes, but also plays a vital role in uniting the local community through various social and spiritual initiatives.
+    </p>
+    <p>
+        The mosque regularly organizes events such as tazkirah sessions, charity drives, gotong-royong activities, and youth programs aimed at strengthening faith and fostering cooperation among villagers. It is managed by a dedicated committee with the support of volunteers who ensure the smooth operation of mosque affairs.
+    </p>
+    <p>
+        With a growing number of programs and responsibilities, the mosque embraces technology to improve administrative efficiency and financial accountability,helping the community thrive in both spiritual and social aspects.
+    </p>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p class="mb-0">© 2025 Kampung Rinching Hulu Mosque. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Committee Members</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{% static 'masjid1.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar .navbar-brand,
+        .navbar .btn-outline-light {
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .container-box {
+            width: 90%;
+            max-width: 1100px;
+            margin: 120px auto 40px auto;
+            background: rgba(255, 255, 255, 0.97);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        h2, h4 {
+            color: #2C3E50;
+            font-weight: 600;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #7D9FCF;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: #5C87B2;
+        }
+
+        .table th, .table td {
+            vertical-align: middle !important;
+        }
+
+        .btn-edit {
+            background-color: #FFE28A;
+            color: #6B4F00;
+            border: none;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background-color: #FFD155;
+            color: #4B3900;
+        }
+
+        .btn-delete {
+            background-color: #FFB4B4;
+            color: #7B1E1E;
+            border: none;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: #FF8C8C;
+            color: #5A0E0E;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: auto;
+            box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">🕌 Admin Dashboard</a>
+        <div>
+            <a href="{% url 'admin_home' %}" class="btn btn-outline-light me-2">Home</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Container -->
+<div class="container-box">
+    <h2 class="text-center mb-4">Manage Mosque Committee Members</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="mb-4">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Select Committee ID</label>
+                <select name="committee_id" class="form-select" id="committee_id_select">
+                    <option value="">-- Add New Member --</option>
+                    {% for c in committees %}
+                        <option value="{{ c.id }}" {% if selected and c.id == selected.id %}selected{% endif %}>{{ c.id }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3" id="custom_id_box" style="display: none;">
+                <label class="form-label">Insert New Committee ID</label>
+                <input type="text" name="custom_committee_id" class="form-control" placeholder="e.g. 1">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Committee IC</label>
+                <input type="text" name="committeeic" class="form-control" value="{{ selected.committeeic|default:'' }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="fullname" class="form-control" value="{{ selected.fullname|default:'' }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" value="{{ selected.username|default:'' }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" value="{{ selected.email|default:'' }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Phone Number</label>
+                <input type="text" name="phone_number" class="form-control" value="{{ selected.phone_number|default:'' }}">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label class="form-label">Gender</label>
+                <select name="gender" class="form-select" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male" {% if selected.gender == 'Male' %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if selected.gender == 'Female' %}selected{% endif %}>Female</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label class="form-label">Password</label>
+                <input type="text" name="password" class="form-control" value="{{ selected.password|default:'' }}" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">
+            {{ selected.committeeic|yesno:"Update Member,Add Member" }}
+        </button>
+    </form>
+
+    <hr>
+    <h4 class="mb-3">Current Committee Members</h4>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>IC</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Gender</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in committees %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.committeeic }}</td>
+                <td>{{ c.fullname }}</td>
+                <td>{{ c.username }}</td>
+                <td>{{ c.email }}</td>
+                <td>{{ c.phone_number }}</td>
+                <td>{{ c.gender }}</td>
+                <td>
+                    <a href="?edit={{ c.id }}" class="btn btn-edit btn-sm">Edit</a>
+                    <a href="{% url 'delete_committee' c.id %}" class="btn btn-delete btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8" class="text-center text-muted">No committee members found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p class="mb-0">© 2025 Kampung Rinching Hulu Mosque. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Script -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdown = document.getElementById("committee_id_select");
+        const idBox = document.getElementById("custom_id_box");
+
+        function toggleIdBox() {
+            idBox.style.display = dropdown.value === "" ? "block" : "none";
+        }
+        toggleIdBox();
+
+        dropdown.addEventListener("change", function () {
+            toggleIdBox();
+            if (this.value === "") {
+                const form = this.closest("form");
+                const inputs = form.querySelectorAll("input, select");
+                inputs.forEach(input => {
+                    if (input.name !== 'committee_id' && input.type !== 'hidden') input.value = "";
+                    if (input.tagName === "SELECT" && input.name !== 'committee_id') input.selectedIndex = 0;
+                });
+            } else {
+                window.location.href = "?edit=" + this.value;
+            }
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

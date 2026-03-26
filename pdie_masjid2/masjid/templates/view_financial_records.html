@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Financial Records | Committee</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("{% static 'masjid1.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        main { flex: 1; }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar .navbar-brand, .navbar .btn-outline-light {
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .navbar .btn-outline-light:hover {
+            background-color: #7D9FCF;
+            color: white !important;
+        }
+
+        .records-container {
+            max-width: 1000px;
+            margin: 120px auto 40px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            color: #333;
+        }
+
+        h2 {
+            color: #2C3E50;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            vertical-align: middle;
+        }
+
+        .table-success {
+            background-color: #D6EAF8 !important;
+        }
+
+        .table-danger {
+            background-color: #FADBD8 !important;
+        }
+
+        .table th {
+            color: #2C3E50;
+        }
+
+        .summary-box {
+            background-color: #f4f6f7;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: auto;
+            box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg static-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">🕌 Committee Dashboard</a>
+        <div>
+            <a href="{% url 'mainpage' %}" class="btn btn-outline-light me-2">Home</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="records-container">
+        <h2>Financial Records for Committee Member</h2>
+        <p class="button-desc">View detailed records of the mosque's <strong>income</strong> and <strong>expenses</strong>. This page is designed to promote transparency and awareness among committee members.</p>
+
+        <!-- INCOME -->
+        <h4 class="section-title">Income Records</h4>
+        {% if income_records %}
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered table-striped">
+                <thead class="table-success">
+                    <tr>
+                        <th>Income ID</th>
+                        <th>Amount (RM)</th>
+                        <th>Source</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for income in income_records %}
+                    <tr>
+                        <td>{{ income.incomeid }}</td>
+                        <td>{{ income.amount }}</td>
+                        <td>{{ income.source }}</td>
+                        <td>{{ income.date|date:"d M Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-dark">No income records available.</p>
+        {% endif %}
+
+        <!-- EXPENSE -->
+        <h4 class="section-title">Expense Records</h4>
+        {% if expense_records %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Expense ID</th>
+                        <th>Amount (RM)</th>
+                        <th>Purpose</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expense_records %}
+                    <tr>
+                        <td>{{ expense.expenseid }}</td>
+                        <td>{{ expense.amount }}</td>
+                        <td>{{ expense.purpose }}</td>
+                        <td>{{ expense.date|date:"d M Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-dark">No expense records available.</p>
+        {% endif %}
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p class="mb-0">© 2025 Kampung Rinching Hulu Mosque. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

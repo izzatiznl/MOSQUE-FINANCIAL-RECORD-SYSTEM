@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Income | Treasurer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                        url("{% static 'masjid1.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar .navbar-brand, .navbar .btn-outline-light {
+            color: #fff !important;
+            font-weight: 500;
+        }
+
+        .container-box {
+            max-width: 1000px;
+            margin: 120px auto 40px auto;
+            background: rgba(255, 255, 255, 0.97);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        h3 {
+            color: #2C3E50;
+            font-weight: 700;
+        }
+
+        .short-desc {
+            font-size: 1rem;
+            color: #555;
+            margin-top: -10px;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .btn-primary {
+            background-color: #7D9FCF;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: #5C87B2;
+        }
+
+        .btn-warning {
+            background-color: #F4D06F;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .btn-warning:hover {
+            background-color: #eac84b;
+        }
+
+        .btn-danger {
+            background-color: #FF8C94;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .btn-danger:hover {
+            background-color: #ff6b74;
+        }
+
+        .table thead {
+            background-color: #D9EAF2;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+
+        .alert {
+            border-radius: 10px;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: auto;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">🕌 Treasurer Dashboard</a>
+        <div>
+            <a href="{% url 'treasurer_home' %}" class="btn btn-outline-light me-2">Home</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container-box">
+    <h3 class="text-center mb-1">Manage Income Records</h3><b></b>
+    <b><p class="text-center short-desc">Record, view, and manage all income transactions for the mosque.</p></b>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Form -->
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Income ID</label>
+                <input type="text" name="incomeid" class="form-control" value="{{ income_to_edit.incomeid|default:'' }}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Amount (RM)</label>
+                <input type="number" name="amount" step="0.01" class="form-control" value="{{ income_to_edit.amount|default:'' }}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Source</label>
+                <input type="text" name="source" class="form-control" value="{{ income_to_edit.source|default:'' }}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Date</label>
+                <input type="date" name="date" class="form-control" value="{{ income_to_edit.date|default:'' }}" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 mt-4">💾 Save Income</button>
+    </form>
+
+    <hr class="my-4">
+
+    <!-- Existing Records Table -->
+    <h5 class="mb-3">Detailed List of Income Transactions</h5>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Amount (RM)</th>
+                    <th>Source</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inc in income_records %}
+                <tr>
+                    <td>{{ inc.incomeid }}</td>
+                    <td>{{ inc.amount }}</td>
+                    <td>{{ inc.source }}</td>
+                    <td>{{ inc.date }}</td>
+                    <td>
+                        <a href="?edit={{ inc.incomeid }}" class="btn btn-warning btn-sm">✏️ Edit</a>
+                        <a href="{% url 'delete_income' inc.incomeid %}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this income?')">🗑️ Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No income records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p class="mb-0">© 2025 Kampung Rinching Hulu Mosque. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

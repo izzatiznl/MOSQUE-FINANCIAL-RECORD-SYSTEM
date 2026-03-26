@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | Mosque Financial Record</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("{% static 'masjid1.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar .navbar-brand, .navbar .btn-outline-light {
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .dashboard-container {
+            max-width: 850px;
+            margin: 130px auto 40px auto;
+            background: rgba(255, 255, 255, 0.93);
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            color: #333;
+        }
+
+        .dashboard-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2C3E50;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-buttons .btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            margin: 15px 0;
+            border-radius: 40px;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-buttons .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-approve { background-color: #BFDCEC; color: #333; }
+        .btn-generate { background-color: #D5ECE7; color: #333; }
+        .btn-committee { background-color: #EAC6D3; color: #6B1D37; }
+        .btn-report { background-color: #FBE9D0; color: #6B4F28; }
+
+        .dashboard-buttons small {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        .dashboard-buttons .btn:hover small {
+            color: #000000 !important;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+
+        .message-container {
+            margin-top: 90px;
+        }
+
+        .custom-alert {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-left: 6px solid #5bc0de;
+            color: #333;
+            font-weight: 500;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-buttons .btn {
+                max-width: 600px;
+                margin: 12px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">🕌 Admin Dashboard</a>
+        <div>
+            <a href="{% url 'logout' %}" class="btn btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Alert messages -->
+<div class="container message-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert custom-alert alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Dashboard Content -->
+<div class="dashboard-container">
+    <h2 class="dashboard-title">Welcome, Administrator!</h2>
+    <div class="dashboard-buttons">
+        <a href="{% url 'approve_budget_page' %}" class="btn btn-approve">
+            Approve Budget Requests
+            <small>Review and approve or reject programme budget proposals.</small>
+        </a>
+        <a href="{% url 'generate_report' %}" class="btn btn-generate">
+            Generate Financial Reports
+            <small>Generate and print official financial reports by date range.</small>
+        </a>
+        <a href="{% url 'manage_committee' %}" class="btn btn-committee">
+            Manage Mosque Committee Info
+            <small>Add, edit, or remove committee members’ information.</small>
+        </a>
+        <a href="{% url 'view_financial_records2' %}" class="btn btn-report">
+            View Financial Record
+            <small>View income, expenses, and balance with financial charts.</small>
+        </a>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p class="mb-0">© 2025 Kampung Rinching Hulu Mosque. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

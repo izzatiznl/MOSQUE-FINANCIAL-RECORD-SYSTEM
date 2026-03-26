@@ -1,0 +1,208 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Event | Mosque Financial Record System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("{% static 'masjid1.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .navbar .navbar-brand,
+        .navbar .btn-outline-light {
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .navbar .btn-outline-light:hover {
+            background-color: #7D9FCF;
+            color: white !important;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 100px;
+            padding-bottom: 40px;
+        }
+
+        .event-form-container {
+            max-width: 750px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.97);
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            color: #333;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 32px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .form-control,
+        textarea,
+        .form-select {
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .form-check-label {
+            color: #2c3e50;
+        }
+
+        .btn-primary {
+            background-color: #FF8C94;
+            border: none;
+            font-weight: 600;
+            border-radius: 12px;
+            font-size: 18px;
+            padding: 12px;
+        }
+
+        .btn-primary:hover {
+            background-color: #e86b74;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.05);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg static-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">🕌 Create Event</a>
+        <div>
+            <a href="{% url 'mainpage' %}" class="btn btn-outline-light me-2">Home</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="event-form-container">
+        <h3>Create New Mosque Event</h3>
+        <p class="text-center mb-4" style="color: #2c3e50;">
+    Please fill in the event details below. You may also request a budget if funding is required for the program.
+</p>
+
+        <!-- Django messages -->
+        {% if messages %}
+            <div id="message-container">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Event Name</label>
+                <input type="text" name="eventname" class="form-control" placeholder="e.g. Majlis Maulidur Rasul" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Event Description</label>
+                <textarea name="eventdesc" class="form-control" placeholder="Briefly describe the event..." required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Event Date</label>
+                <input type="date" name="eventdate" class="form-control" required>
+            </div>
+
+            <!-- Budget toggle -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="addBudget" name="add_budget" onclick="toggleBudget()">
+                <label class="form-check-label" for="addBudget">Also request a budget for this event</label>
+            </div>
+
+            <!-- Budget request fields -->
+            <div id="budgetSection" style="display: none;">
+                <div class="mb-3">
+                    <label class="form-label">Budget Amount (RM)</label>
+                    <input type="number" name="amountrequested" class="form-control" placeholder="e.g. 500.00" min="1" step="0.01">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Budget Reason</label>
+                    <textarea name="reason" class="form-control" placeholder="Why is this budget needed?"></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">📅 Create Event</button>
+        </form>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p class="mb-0">© 2025 Kampung Rinching Hulu Mosque. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Script Section -->
+<script>
+    // Toggle budget section
+    function toggleBudget() {
+        const section = document.getElementById("budgetSection");
+        const checkbox = document.getElementById("addBudget");
+        section.style.display = checkbox.checked ? "block" : "none";
+
+        if (checkbox.checked) {
+            setTimeout(() => {
+                section.scrollIntoView({ behavior: "smooth" });
+            }, 200);
+        }
+    }
+
+    // Auto fade-out Django messages after 4 seconds
+    setTimeout(function () {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function (alert) {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            bsAlert.close();
+        });
+    }, 4000);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
