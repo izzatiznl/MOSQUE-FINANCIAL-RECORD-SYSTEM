@@ -27,3 +27,35 @@
 - **Database:** SQLite (default, can be configured to MySQL)
 
 
+How to Run:
+1. Clone the repository
+```bash
+git clone [repository-link]
+```
+
+2. Navigate to the project folder
+```bash
+cd mosque-financial-system
+```
+
+3. Install Django
+```bash
+pip install django
+```
+
+4. Run migrations
+```bash
+python manage.py migrate
+```
+
+5. Start the server
+```bash
+python manage.py runserver
+```
+
+6. Open in your browser
+```text
+http://127.0.0.1:8000/
+```
+
+
