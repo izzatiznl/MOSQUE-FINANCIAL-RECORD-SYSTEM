@@ -55,7 +55,7 @@ python manage.py runserver
 
 6. Open in your browser
 ```text
-http://127.0.0.1:8000/
+http://127.0.0.1:8000/homepage
 ```
 
 
