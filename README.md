@@ -24,7 +24,7 @@
 ## 🧱 Technologies Used
 - **Backend:** Django  
 - **Frontend:** HTML, CSS, JavaScript  
-- **Database:** SQLite (default, can be configured to MySQL)
+- **Database:** SQLite 
 
 
 How to Run:
